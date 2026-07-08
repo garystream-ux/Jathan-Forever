@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { motion, useReducedMotion } from 'motion/react';
+import useInViewSafe from './useInViewSafe';
 import { blurForImage } from '@/lib/images';
 import { authorMeta, type Author } from '@/lib/authors';
 
@@ -51,47 +52,7 @@ export default function PhotoGrid({
     <>
       <div className={`grid gap-x-3 gap-y-6 sm:gap-x-4 ${grid}`}>
         {photos.map((p, i) => (
-          <motion.figure
-            key={p.src + i}
-            initial={reduce ? false : { opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: (i % 3) * 0.06 }}
-          >
-            <motion.button
-              type="button"
-              onClick={() => open(i)}
-              initial={reduce ? false : { clipPath: 'inset(0 0 100% 0)' }}
-              whileInView={{ clipPath: 'inset(0 0 0% 0)' }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: (i % 3) * 0.08 }}
-              className="group relative block aspect-[4/3] w-full overflow-hidden rounded-lg bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-atlantic"
-              aria-label={`Open photo: ${p.alt}`}
-            >
-              <Image
-                src={p.src}
-                alt={p.alt}
-                fill
-                loading="lazy"
-                sizes="(max-width: 768px) 50vw, 33vw"
-                placeholder="blur"
-                blurDataURL={blurForImage(p.src)}
-                className="object-cover transition-transform duration-700 ease-physical group-hover:scale-105"
-              />
-              <span className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/10" />
-            </motion.button>
-
-            {p.caption && (
-              <figcaption className="mt-2 font-sans text-sm leading-snug text-ink/70">
-                <span style={p.by ? { color: authorMeta[p.by].color } : undefined}>
-                  {p.caption}
-                </span>
-                {p.by && (
-                  <span className="ml-1.5 text-ink/40">— {authorMeta[p.by].first}</span>
-                )}
-              </figcaption>
-            )}
-          </motion.figure>
+          <GridPhoto key={p.src + i} photo={p} index={i} reduce={!!reduce} onOpen={() => open(i)} />
         ))}
       </div>
 
@@ -105,5 +66,63 @@ export default function PhotoGrid({
         />
       )}
     </>
+  );
+}
+
+/** One grid tile: fade/lift on the figure, clip-path wipe on the photo. */
+function GridPhoto({
+  photo: p,
+  index: i,
+  reduce,
+  onOpen,
+}: {
+  photo: Photo;
+  index: number;
+  reduce: boolean;
+  onOpen: () => void;
+}) {
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInViewSafe(ref, 0.2);
+
+  return (
+    <motion.figure
+      ref={ref}
+      initial={reduce ? false : { opacity: 0, y: 16 }}
+      animate={inView ? { opacity: 1, y: 0 } : undefined}
+      transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1], delay: (i % 3) * 0.06 }}
+    >
+      <motion.button
+        type="button"
+        onClick={onOpen}
+        initial={reduce ? false : { clipPath: 'inset(0 0 100% 0)' }}
+        animate={inView ? { clipPath: 'inset(0 0 0% 0)' } : undefined}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: (i % 3) * 0.08 }}
+        className="group relative block aspect-[4/3] w-full overflow-hidden rounded-lg bg-ink/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-atlantic"
+        aria-label={`Open photo: ${p.alt}`}
+      >
+        <Image
+          src={p.src}
+          alt={p.alt}
+          fill
+          loading="lazy"
+          sizes="(max-width: 768px) 50vw, 33vw"
+          placeholder="blur"
+          blurDataURL={blurForImage(p.src)}
+          className="object-cover transition-transform duration-700 ease-physical group-hover:scale-105"
+        />
+        <span className="pointer-events-none absolute inset-0 bg-ink/0 transition-colors duration-300 group-hover:bg-ink/10" />
+      </motion.button>
+
+      {p.caption && (
+        <figcaption className="mt-2 font-sans text-sm leading-snug text-ink/70">
+          <span style={p.by ? { color: authorMeta[p.by].color } : undefined}>
+            {p.caption}
+          </span>
+          {p.by && (
+            <span className="ml-1.5 text-ink/40">— {authorMeta[p.by].first}</span>
+          )}
+        </figcaption>
+      )}
+    </motion.figure>
   );
 }

@@ -2,7 +2,9 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRef } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import useInViewSafe from './useInViewSafe';
 import AuthorByline from './AuthorByline';
 import { blurForImage } from '@/lib/images';
 import type { Author } from '@/lib/authors';
@@ -33,12 +35,14 @@ export default function JournalCard({
   priority?: boolean;
 }) {
   const reduce = useReducedMotion();
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInViewSafe(ref, 0.25);
 
   return (
     <motion.article
+      ref={ref}
       initial={reduce ? false : { opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.25 }}
+      animate={inView ? { opacity: 1, y: 0 } : undefined}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay: index * 0.08 }}
       className="group"
     >
@@ -46,8 +50,7 @@ export default function JournalCard({
         <div className="relative aspect-[4/3] overflow-hidden rounded-lg bg-ink/5 shadow-soft">
           <motion.div
             initial={reduce ? false : { clipPath: 'inset(0 0 100% 0)' }}
-            whileInView={{ clipPath: 'inset(0 0 0% 0)' }}
-            viewport={{ once: true, amount: 0.25 }}
+            animate={inView ? { clipPath: 'inset(0 0 0% 0)' } : undefined}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.1 + index * 0.08 }}
             className="absolute inset-0"
           >

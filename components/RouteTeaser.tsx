@@ -1,7 +1,9 @@
 'use client';
 
 import Link from 'next/link';
+import { useRef } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
+import useInViewSafe from './useInViewSafe';
 import type { RouteStop } from '@/lib/route';
 
 /**
@@ -18,6 +20,8 @@ const PAD_Y = 70;
 
 export default function RouteTeaser({ stops }: { stops: RouteStop[] }) {
   const reduce = useReducedMotion();
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInViewSafe(ref, 0.4);
 
   const lats = stops.map((s) => s.lat);
   const lngs = stops.map((s) => s.lng);
@@ -36,7 +40,7 @@ export default function RouteTeaser({ stops }: { stops: RouteStop[] }) {
   const d = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
 
   return (
-    <div className="relative">
+    <div className="relative" ref={ref}>
       <svg
         viewBox={`0 0 ${W} ${H}`}
         className="h-auto w-full"
@@ -66,8 +70,7 @@ export default function RouteTeaser({ stops }: { stops: RouteStop[] }) {
           strokeLinecap="round"
           strokeLinejoin="round"
           initial={reduce ? false : { pathLength: 0 }}
-          whileInView={{ pathLength: 1 }}
-          viewport={{ once: true, amount: 0.4 }}
+          animate={inView ? { pathLength: 1 } : undefined}
           transition={{ duration: 2, ease: [0.22, 1, 0.36, 1] }}
         />
 
@@ -76,8 +79,7 @@ export default function RouteTeaser({ stops }: { stops: RouteStop[] }) {
           <motion.g
             key={p.slug}
             initial={reduce ? false : { opacity: 0, scale: 0 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.4 }}
+            animate={inView ? { opacity: 1, scale: 1 } : undefined}
             transition={{ delay: reduce ? 0 : 0.3 + i * 0.28, type: 'spring', stiffness: 300, damping: 18 }}
             style={{ transformOrigin: `${p.x}px ${p.y}px` }}
           >

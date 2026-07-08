@@ -1,7 +1,8 @@
 'use client';
 
 import { motion, useReducedMotion, type Variants } from 'motion/react';
-import { useMemo, type ElementType, type ReactNode } from 'react';
+import { useMemo, useRef, type ElementType, type ReactNode } from 'react';
+import useInViewSafe from './useInViewSafe';
 
 type Direction = 'up' | 'down' | 'left' | 'right' | 'none';
 
@@ -30,6 +31,8 @@ interface RevealProps {
 
 /**
  * Scroll-triggered reveal: fades + eases content up as it enters the viewport.
+ * Visibility comes from useInViewSafe (IntersectionObserver + geometry
+ * fallback) so a reveal can never be silently lost.
  * Honors prefers-reduced-motion (renders statically, fully visible).
  */
 export default function Reveal({
@@ -40,9 +43,10 @@ export default function Reveal({
   as = 'div',
   className,
   amount = 0.3,
-  once = true,
 }: RevealProps) {
   const reduce = useReducedMotion();
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInViewSafe(ref, amount);
   // motion.create() is the non-deprecated factory; memoize so we don't rebuild
   // the component type (and break reconciliation) on every render.
   const MotionTag = useMemo(() => motion.create(as as ElementType), [as]);
@@ -67,11 +71,11 @@ export default function Reveal({
 
   return (
     <MotionTag
+      ref={ref}
       className={className}
       variants={variants}
       initial="hidden"
-      whileInView="show"
-      viewport={{ once, amount }}
+      animate={inView ? 'show' : 'hidden'}
     >
       {children}
     </MotionTag>
