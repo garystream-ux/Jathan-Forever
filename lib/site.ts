@@ -7,8 +7,14 @@ export const site = {
   tagline: 'Two boys, one car, and the whole country in between.',
   description:
     "Ethan Highfield and Jacob Monroe's shared travel journal — the summer after Ethan's Edge, driving from Vermont to the California coast. Dated diary entries in two voices, an interactive route map, and photographs from the road.",
-  // Used for absolute URLs (OG images, sitemap). Override via NEXT_PUBLIC_SITE_URL.
-  url: process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') || 'https://jathanforever.com',
+  // Used for absolute URLs (OG images, sitemap) — server-side only.
+  // Priority: explicit NEXT_PUBLIC_SITE_URL, then Vercel's production domain
+  // (set automatically on every deploy, follows custom domains), then fallback.
+  url:
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, '') ||
+    (process.env.VERCEL_PROJECT_PRODUCTION_URL
+      ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`
+      : 'https://jathanforever.com'),
   author: 'Gary Stream',
   bookTitle: "Ethan's Edge",
   bookLink: '[PURCHASE / GOODREADS LINK]',
