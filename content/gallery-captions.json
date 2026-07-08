@@ -1,0 +1,43 @@
+{
+  "_comment": "Voiced captions for the gallery, keyed by image path. 'by' is the author (ethan | jacob) for color-coded display. These are display captions; write separate descriptive alt text for accessibility.",
+
+  "/images/stops/burlington/cover.jpg": { "by": "ethan", "caption": "The driveway I grew up staring out of. One last look before we pointed the car west." },
+  "/images/stops/burlington/01.jpg":   { "by": "ethan", "caption": "The cooler got its own seat. I got told I overpacked. Both true." },
+  "/images/stops/burlington/02.jpg":   { "by": "ethan", "caption": "The send-off committee. Abby made me an actual handwritten snack list." },
+
+  "/images/stops/niagara-falls/cover.jpg": { "by": "jacob", "caption": "You hear it before you see it. Then you stop talking." },
+  "/images/stops/niagara-falls/01.jpg":    { "by": "jacob", "caption": "Soaked, freezing, and neither of us willing to leave." },
+  "/images/stops/niagara-falls/02.jpg":    { "by": "ethan", "caption": "He pretended the snow globe was dumb. He bought it anyway." },
+
+  "/images/stops/detroit/cover.jpg": { "by": "ethan", "caption": "Hitsville, U.S.A. I made us go in twice." },
+  "/images/stops/detroit/01.jpg":    { "by": "ethan", "caption": "Coney dogs. A religious experience. No further notes." },
+  "/images/stops/detroit/02.jpg":    { "by": "ethan", "caption": "Evidence: a handsome scarecrow attacked by bees. Vault material." },
+
+  "/images/stops/chicago/cover.jpg": { "by": "jacob", "caption": "Tall, loud, indifferent. I found it comforting." },
+  "/images/stops/chicago/01.jpg":    { "by": "jacob", "caption": "For one second the light off the lake looked exactly like home." },
+  "/images/stops/chicago/02.jpg":    { "by": "ethan", "caption": "I ate deep dish like regular pizza. I regret nothing and everything." },
+
+  "/images/stops/st-paul/cover.jpg": { "by": "ethan", "caption": "A country road, an old oak tree, and a lot Jacob never had to say out loud." },
+  "/images/stops/st-paul/01.jpg":    { "by": "ethan", "caption": "I hung back until he reached for me. Then I was already there." },
+  "/images/stops/st-paul/02.jpg":    { "by": "ethan", "caption": "Later, in the city, he laughed at something dumb I said. That's the one that mattered." },
+
+  "/images/stops/badlands/cover.jpg": { "by": "jacob", "caption": "Pink, bone, rust, forever. Worth setting an alarm in the dark." },
+  "/images/stops/badlands/01.jpg":    { "by": "jacob", "caption": "I didn't watch the sunrise much. I watched him watch it." },
+  "/images/stops/badlands/02.jpg":    { "by": "jacob", "caption": "Nothing around for miles. Exactly what we came for." },
+
+  "/images/stops/rocky-mountain/cover.jpg": { "by": "ethan", "caption": "Too many stars. Honestly almost rude." },
+  "/images/stops/rocky-mountain/01.jpg":    { "by": "ethan", "caption": "Confidently naming two constellations to a man too kind to correct me." },
+  "/images/stops/rocky-mountain/02.jpg":    { "by": "ethan", "caption": "I packed wrong. Jacob dresses me. The running theme of this trip." },
+
+  "/images/stops/zion/cover.jpg": { "by": "jacob", "caption": "Two thousand feet of red rock. Ethan called it a metaphor. It is a canyon." },
+  "/images/stops/zion/01.jpg":    { "by": "jacob", "caption": "Bawling at a rock formation in front of forty strangers, completely unbothered." },
+  "/images/stops/zion/02.jpg":    { "by": "jacob", "caption": "A kiss on the trail, out in the open, like it was nothing." },
+
+  "/images/stops/las-vegas/cover.jpg": { "by": "ethan", "caption": "Vegas on the Fourth of July. Complete sensory chaos. Thriving." },
+  "/images/stops/las-vegas/01.jpg":    { "by": "ethan", "caption": "He bet zero dollars and said he already won. I'm still not over it." },
+  "/images/stops/las-vegas/02.jpg":    { "by": "ethan", "caption": "Three firework shows from one parking garage. He was right, as always." },
+
+  "/images/stops/big-sur/cover.jpg": { "by": "jacob", "caption": "The road runs out right here. I'm glad it does." },
+  "/images/stops/big-sur/01.jpg":    { "by": "jacob", "caption": "Wearing the spare jacket he swore I'd never need. He runs warm, I run cold. We fit." },
+  "/images/stops/big-sur/02.jpg":    { "by": "ethan", "caption": "The snow globe survived all three thousand miles. It's going on the shelf." }
+}

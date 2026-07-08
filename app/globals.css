@@ -1,0 +1,218 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+  Jathan Forever — global styles & design tokens.
+  These CSS variables mirror tailwind.config.ts so non-Tailwind surfaces
+  (Leaflet, Giscus, raw SVG) can reference the exact same palette.
+*/
+:root {
+  --ink: #14304a; /* deep blue — text / structure / Jacob's voice */
+  --atlantic: #3e6e9c; /* interactive accent blue */
+  --coffee: #5c3d2e; /* coffee brown — secondary */
+  --clay: #b07a4f; /* warm tan / clay — Ethan's voice */
+  --bone: #faf5ee; /* bone white — dominant canvas */
+  --paper: #ffffff; /* pure white — cards */
+
+  --ring: #3e6e9c;
+  --header-h: 4.5rem;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  /* Lenis controls scrolling; disable native smooth to avoid fighting it. */
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  body {
+    background-color: var(--bone);
+    color: var(--ink);
+    font-feature-settings: 'kern', 'liga', 'clig', 'calt';
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  ::selection {
+    background: var(--clay);
+    color: var(--bone);
+  }
+
+  /* Visible, on-brand focus ring everywhere. */
+  :focus-visible {
+    outline: 2px solid var(--atlantic);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  /* Fraunces optical sizing on display type. */
+  .font-display {
+    font-optical-sizing: auto;
+  }
+}
+
+@layer components {
+  .shell {
+    @apply mx-auto w-full max-w-shell px-5 sm:px-8 lg:px-12;
+  }
+
+  /* Animated underline-draw for text links. */
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* Small caps editorial eyebrow. */
+  .eyebrow {
+    @apply font-sans text-xs font-medium uppercase tracking-[0.25em] text-clay;
+  }
+
+  /* Diary-entry prose. Voice color is set per-entry via --voice. */
+  .entry-prose {
+    @apply font-sans text-lg leading-[1.8] text-ink/85;
+  }
+  .entry-prose > p {
+    @apply mt-6;
+  }
+  .entry-prose > p:first-of-type {
+    @apply mt-0;
+  }
+  /* Editorial drop cap in the author's voice color. */
+  .entry-prose > p:first-of-type::first-letter {
+    float: left;
+    font-family: var(--font-display), Georgia, serif;
+    font-weight: 600;
+    font-size: 3.6em;
+    line-height: 0.78;
+    padding-right: 0.08em;
+    margin-top: 0.04em;
+    color: var(--voice, var(--clay));
+  }
+  /* Bio prose: like entry prose but no drop cap (used on the About page). */
+  .bio-prose {
+    @apply font-sans text-lg leading-relaxed text-ink/75;
+  }
+  .bio-prose > p {
+    @apply mt-4;
+  }
+  .bio-prose > p:first-of-type {
+    @apply mt-0;
+  }
+  .bio-prose strong {
+    @apply font-semibold text-ink;
+  }
+  .bio-prose em {
+    @apply italic;
+  }
+
+  .entry-prose h2 {
+    @apply mt-12 font-display text-3xl tracking-tightish text-ink;
+  }
+  .entry-prose h3 {
+    @apply mt-10 font-display text-2xl text-ink;
+  }
+  .entry-prose blockquote {
+    @apply my-8 border-l-2 pl-5 font-display text-xl italic text-coffee;
+    border-color: var(--voice, var(--clay));
+  }
+  .entry-prose a {
+    @apply font-medium text-atlantic underline decoration-clay/40 underline-offset-2 hover:decoration-atlantic;
+  }
+  .entry-prose ul {
+    @apply mt-6 list-disc space-y-2 pl-6 marker:text-clay;
+  }
+  .entry-prose em {
+    @apply italic;
+  }
+  .entry-prose strong {
+    @apply font-semibold text-ink;
+  }
+  .entry-prose hr {
+    @apply my-10 border-clay/25;
+  }
+}
+
+/* ── Leaflet map theming (matches the palette) ───────────────────────── */
+.jf-pin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9999px 9999px 9999px 2px;
+  transform: rotate(-45deg);
+  background: var(--pin, #14304a);
+  color: var(--bone);
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  border: 2px solid var(--bone);
+  box-shadow: 0 6px 14px -6px rgba(20, 48, 74, 0.6);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.jf-pin > * {
+  transform: rotate(45deg);
+}
+.jf-marker:hover .jf-pin,
+.jf-pin--active {
+  transform: rotate(-45deg) scale(1.18);
+}
+@media (prefers-reduced-motion: reduce) {
+  .jf-pin {
+    transition: none;
+  }
+}
+
+.leaflet-container {
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+.leaflet-popup-content-wrapper {
+  background: var(--bone);
+  color: var(--ink);
+  border-radius: 12px;
+  box-shadow: 0 18px 40px -20px rgba(20, 48, 74, 0.5);
+}
+.leaflet-popup-content {
+  margin: 12px;
+}
+.leaflet-popup-tip {
+  background: var(--bone);
+}
+.leaflet-bar a {
+  color: var(--ink);
+}
+
+/*
+  Reduced motion: neutralize transitions/animations site-wide.
+  Component-level guards exist too (useReducedMotion), this is the safety net.
+*/
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
