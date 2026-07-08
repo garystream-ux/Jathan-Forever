@@ -62,6 +62,10 @@ export default function JournalCard({
               placeholder="blur"
               blurDataURL={blurForImage(entry.coverImage)}
               priority={priority}
+              // Native lazy-loading shares the same visibility machinery that
+              // useInViewSafe works around — force the fetch once we know the
+              // card is on screen.
+              loading={priority ? undefined : inView ? 'eager' : 'lazy'}
               className="object-cover transition-transform duration-700 ease-physical group-hover:scale-105"
             />
           </motion.div>

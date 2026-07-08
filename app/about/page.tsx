@@ -79,6 +79,9 @@ export default function AboutPage() {
                     sizes="(max-width: 1024px) 90vw, 420px"
                     placeholder="blur"
                     blurDataURL={blurDataURL(subject.color)}
+                    // Only a handful of images on this page; eager-load so they
+                    // never depend on native lazy-loading's visibility checks.
+                    loading="eager"
                     className="object-cover"
                   />
                   <span
@@ -166,6 +169,7 @@ export default function AboutPage() {
                 sizes="160px"
                 placeholder="blur"
                 blurDataURL={blurDataURL('#B07A4F')}
+                loading="eager"
                 className="object-cover"
               />
             </div>

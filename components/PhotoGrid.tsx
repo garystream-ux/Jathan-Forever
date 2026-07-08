@@ -104,7 +104,9 @@ function GridPhoto({
           src={p.src}
           alt={p.alt}
           fill
-          loading="lazy"
+          // Eager once the geometry check confirms visibility — native lazy
+          // loading can silently never fire on some setups (see useInViewSafe).
+          loading={inView ? 'eager' : 'lazy'}
           sizes="(max-width: 768px) 50vw, 33vw"
           placeholder="blur"
           blurDataURL={blurForImage(p.src)}

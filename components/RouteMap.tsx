@@ -128,6 +128,8 @@ export default function RouteMap({ stops }: { stops: RouteStop[] }) {
                       sizes="208px"
                       placeholder="blur"
                       blurDataURL={blurForImage(s.coverImage)}
+                      // Popup content only mounts when opened — load immediately.
+                      loading="eager"
                       className="object-cover"
                     />
                   </div>
