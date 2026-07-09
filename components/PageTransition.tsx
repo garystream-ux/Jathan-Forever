@@ -1,12 +1,18 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
-import { useEffect } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
+import { useEffect, useRef } from 'react';
 
 /**
- * Smooth cross-route transitions. A soft fade + lift on the incoming page,
- * keyed by pathname so AnimatePresence runs on navigation.
+ * Soft fade + lift on the incoming page, keyed by pathname.
+ *
+ * Deliberately enter-only: no AnimatePresence, no exit animation. The old
+ * mode="wait" exit blocked the incoming page from mounting until the outgoing
+ * animation reported completion — and that handoff can stall with the App
+ * Router on slower/throttled devices, leaving a permanently blank page on
+ * every subsequent navigation. Mounting the new page immediately can never
+ * stall; worst case the fade simply doesn't play.
  *
  * Scroll is reset to the top on each route change (driving Lenis when present).
  * Fully disabled under prefers-reduced-motion — content just swaps.
@@ -14,6 +20,12 @@ import { useEffect } from 'react';
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const reduce = useReducedMotion();
+  // No fade on the very first paint — only on client-side navigations.
+  const firstRender = useRef(true);
+
+  useEffect(() => {
+    firstRender.current = false;
+  }, []);
 
   useEffect(() => {
     const lenis = (window as unknown as { __lenis?: { scrollTo: (n: number, o?: object) => void } })
@@ -25,16 +37,13 @@ export default function PageTransition({ children }: { children: React.ReactNode
   if (reduce) return <>{children}</>;
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -8 }}
-        transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-      >
-        {children}
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      key={pathname}
+      initial={firstRender.current ? false : { opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+    >
+      {children}
+    </motion.div>
   );
 }
