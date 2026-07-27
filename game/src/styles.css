@@ -1,0 +1,809 @@
+:root {
+  --bg: #131427;
+  --panel: #1c1d38;
+  --panel-2: #232449;
+  --line: #323463;
+  --ink: #e8e4f2;
+  --dim: #9a94b8;
+  --coral: #ff7a5c;
+  --coral-deep: #e85d43;
+  --lav: #b7a8e0;
+  --amber: #ffc46b;
+  --red: #e2564f;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  background-image: radial-gradient(ellipse at 15% -10%, #232045 0%, transparent 55%),
+    radial-gradient(ellipse at 95% 115%, #1b1733 0%, transparent 50%);
+  color: var(--ink);
+  font-family: 'Instrument Sans', system-ui, sans-serif;
+  display: flex;
+  justify-content: center;
+  padding: 22px 12px;
+  min-height: 100vh;
+}
+#root {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.wrap {
+  width: 100%;
+  max-width: 1140px;
+  position: relative;
+}
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 14px;
+  padding: 13px 20px;
+}
+.title-block h1 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 25px;
+  margin: 0;
+  letter-spacing: 1px;
+  color: var(--coral);
+}
+.title-block .sub {
+  font-size: 12.5px;
+  color: var(--dim);
+  margin-top: 2px;
+}
+.back-link {
+  color: var(--lav);
+  text-decoration: none;
+}
+.back-link:hover {
+  text-decoration: underline;
+}
+.hud {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.pill {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  padding: 6px 14px;
+  border-radius: 9px;
+  color: var(--ink);
+}
+.pill b {
+  color: var(--amber);
+}
+button {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  padding: 8px 17px;
+  border-radius: 9px;
+  transition: transform 0.1s, background 0.15s;
+}
+button:active {
+  transform: scale(0.96);
+}
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+.btn-hint {
+  background: var(--coral);
+  border: none;
+  color: #2a130c;
+  font-weight: 700;
+}
+.btn-hint:disabled {
+  background: #4a3040;
+  color: #7d6a80;
+  cursor: not-allowed;
+}
+.btn-reset {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--ink);
+}
+.btn-reset:hover {
+  background: var(--panel-2);
+}
+.btn-link {
+  display: inline-block;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px;
+  letter-spacing: 0.5px;
+  padding: 8px 17px;
+  border-radius: 9px;
+  text-decoration: none;
+}
+.game {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.scene {
+  flex: 1 1 660px;
+  min-width: 320px;
+  position: relative;
+}
+.scene svg {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: #1b1d3f;
+  cursor: crosshair;
+}
+.panel {
+  flex: 0 1 250px;
+  min-width: 220px;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 14px;
+  padding: 16px;
+  align-self: flex-start;
+}
+.panel h2 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13px;
+  margin: 0 0 10px;
+  letter-spacing: 2px;
+  color: var(--lav);
+  text-transform: uppercase;
+}
+.panel ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.panel li {
+  padding: 4px 0;
+  border-bottom: 1px dashed #272850;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  transition: opacity 0.3s;
+}
+.panel li:last-child {
+  border-bottom: none;
+}
+.panel li .ico {
+  width: 20px;
+  text-align: center;
+  flex: 0 0 20px;
+}
+.panel li.done {
+  opacity: 0.38;
+}
+.panel li.done .name {
+  text-decoration: line-through;
+}
+.msg {
+  margin-top: 12px;
+  font-size: 12.5px;
+  min-height: 20px;
+  color: var(--dim);
+  font-style: italic;
+}
+.legend {
+  margin-top: 10px;
+  font-size: 11.5px;
+  color: #6b668c;
+  line-height: 1.5;
+}
+
+/* hit shapes: invisible, but keyboard focus shows a subtle ring */
+.hit {
+  cursor: crosshair;
+  outline: none;
+}
+.hit:focus-visible {
+  stroke: var(--amber);
+  stroke-opacity: 0.55;
+  stroke-width: 2.5;
+}
+
+/* ===== overlay FX ===== */
+.fx-found {
+  transform-box: view-box;
+  animation: fxFoundPop 0.35s ease-out;
+  filter: drop-shadow(0 0 5px rgba(255, 196, 107, 0.6));
+}
+@keyframes fxFoundPop {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.fx-ripple {
+  transform-box: view-box;
+  animation: fxRipple 0.8s ease-out forwards;
+}
+@keyframes fxRipple {
+  from {
+    transform: scale(1);
+    opacity: 0.85;
+  }
+  to {
+    transform: scale(4.5);
+    opacity: 0;
+  }
+}
+.fx-float {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-weight: 700;
+  animation: fxFloat 1.1s ease-out forwards;
+}
+@keyframes fxFloat {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-26px);
+    opacity: 0;
+  }
+}
+.fx-pulse {
+  animation: fxPulse 0.44s ease-in-out 4 alternate;
+  filter: drop-shadow(0 0 6px rgba(255, 122, 92, 0.6));
+}
+@keyframes fxPulse {
+  from {
+    opacity: 0.9;
+  }
+  to {
+    opacity: 0.08;
+  }
+}
+
+/* ===== scene atmosphere FX (all killed by the reduced-motion rule) ===== */
+.fx-mist {
+  animation: fxMist 9s ease-in-out infinite alternate;
+}
+@keyframes fxMist {
+  from {
+    transform: translateY(0);
+    opacity: 0.3;
+  }
+  to {
+    transform: translateY(-26px);
+    opacity: 0.12;
+  }
+}
+.fx-neon {
+  animation: fxNeon 3.4s linear infinite;
+}
+@keyframes fxNeon {
+  0%, 88% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 0.4;
+  }
+  92% {
+    opacity: 1;
+  }
+  95% {
+    opacity: 0.55;
+  }
+  97%, 100% {
+    opacity: 1;
+  }
+}
+.fx-twinkle {
+  animation: fxTwinkle 4.5s ease-in-out infinite alternate;
+}
+@keyframes fxTwinkle {
+  from {
+    opacity: 0.95;
+  }
+  to {
+    opacity: 0.4;
+  }
+}
+
+/* ===== win overlay ===== */
+.win {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: rgba(15, 13, 30, 0.8);
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(2px);
+  display: flex;
+  animation: winFade 0.3s ease 0.4s both;
+}
+@keyframes winFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.win-card {
+  background: var(--panel);
+  border: 1px solid var(--coral);
+  border-radius: 16px;
+  padding: 26px 40px;
+  text-align: center;
+  box-shadow: 0 0 46px rgba(255, 122, 92, 0.28);
+  animation: pop 0.4s ease 0.4s both;
+  max-width: 88%;
+}
+@keyframes pop {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.win-card .rank-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  color: var(--dim);
+  text-transform: uppercase;
+}
+.win-card .rank {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 27px;
+  color: var(--coral);
+  letter-spacing: 1px;
+  margin: 4px 0 10px;
+}
+.win-card .stats {
+  font-size: 13.5px;
+  color: var(--ink);
+  line-height: 1.7;
+}
+.win-card .stats b {
+  color: var(--amber);
+}
+.souvenir-earned {
+  margin-top: 12px;
+  font-size: 13px;
+  color: var(--lav);
+}
+.souvenir-earned b {
+  color: var(--amber);
+}
+.diary-link {
+  display: block;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--coral);
+}
+.diary-link.dim {
+  color: #6b668c;
+  font-style: italic;
+}
+.win-actions {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ===== intro card ===== */
+.overlay-screen {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 13, 30, 0.86);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 10;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 28px 34px;
+  max-width: 460px;
+  text-align: center;
+  animation: pop 0.35s ease both;
+}
+.intro-card .eyebrow {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--dim);
+}
+.intro-card h2 {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--coral);
+  font-size: 26px;
+  margin: 8px 0 12px;
+  letter-spacing: 1px;
+}
+.intro-line {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--ink);
+  margin: 0 0 20px;
+}
+.intro-line em {
+  color: var(--lav);
+}
+
+/* ===== title screen ===== */
+.title-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 82vh;
+  gap: 6px;
+}
+.title-van {
+  width: 200px;
+  max-width: 60vw;
+  margin-bottom: 4px;
+}
+.game-logo {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--coral);
+  font-size: clamp(34px, 7vw, 52px);
+  line-height: 1.04;
+  letter-spacing: 1px;
+  margin: 0;
+}
+.game-logo span {
+  display: block;
+  color: var(--lav);
+  font-size: 0.62em;
+  letter-spacing: 3px;
+  margin-top: 6px;
+  text-transform: uppercase;
+}
+.tagline {
+  color: var(--dim);
+  font-size: 14.5px;
+  margin: 14px 0 22px;
+  line-height: 1.6;
+  max-width: 420px;
+}
+.btn-big {
+  display: inline-block;
+  text-decoration: none;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 15px;
+  letter-spacing: 1px;
+  padding: 12px 30px;
+  border-radius: 11px;
+}
+.credit {
+  color: #6b668c;
+  font-size: 12px;
+  margin-top: 26px;
+  line-height: 1.6;
+  max-width: 400px;
+}
+.credit em {
+  color: var(--lav);
+  font-style: italic;
+}
+
+/* ===== route map ===== */
+.map-panel {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  border-radius: 14px;
+  padding: 10px;
+}
+.map-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.map-panel svg {
+  width: 100%;
+  min-width: 720px; /* keeps labels and tap targets usable on phones */
+  height: auto;
+  display: block;
+}
+.map-marker.clickable {
+  cursor: pointer;
+  outline: none;
+}
+.map-marker.clickable:hover circle:not(.map-pulse),
+.map-marker.clickable:focus-visible circle:not(.map-pulse) {
+  stroke: var(--amber);
+  stroke-width: 3;
+}
+.map-marker.locked {
+  outline: none;
+}
+.map-pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: mapPulse 1.6s ease-in-out infinite;
+}
+@keyframes mapPulse {
+  0% {
+    transform: scale(0.72);
+    opacity: 0.9;
+  }
+  70% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1.25);
+    opacity: 0;
+  }
+}
+
+/* ===== glovebox (souvenir shelf) ===== */
+.below-map {
+  margin-top: 14px;
+}
+.glovebox {
+  flex: none;
+  width: 100%;
+}
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(88px, 1fr));
+  gap: 8px;
+}
+.slot {
+  border: 1px dashed var(--line);
+  border-radius: 10px;
+  padding: 10px 6px 8px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  opacity: 0.45;
+}
+.slot.got {
+  border-style: solid;
+  border-color: #4a4c7e;
+  background: var(--panel-2);
+  opacity: 1;
+}
+.slot-ico {
+  font-size: 20px;
+  line-height: 1;
+}
+.slot .slot-ico {
+  filter: grayscale(1);
+}
+.slot.got .slot-ico {
+  filter: none;
+}
+.slot-name {
+  font-size: 10.5px;
+  color: var(--dim);
+  line-height: 1.25;
+}
+.slot.got .slot-name {
+  color: var(--ink);
+}
+.paperbacks {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pb {
+  filter: grayscale(1);
+  opacity: 0.3;
+  font-size: 14px;
+}
+.pb.got {
+  filter: none;
+  opacity: 1;
+}
+.pb-label {
+  font-size: 11.5px;
+  color: var(--dim);
+}
+
+/* route-map call-to-action once the trip is complete */
+.finale-cta {
+  display: block;
+  margin-top: 14px;
+  padding: 11px 14px;
+  border-radius: 11px;
+  text-align: center;
+  text-decoration: none;
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: 13.5px;
+  letter-spacing: 0.5px;
+  color: #2a130c;
+  background: linear-gradient(100deg, var(--coral), var(--amber));
+  box-shadow: 0 0 24px rgba(255, 122, 92, 0.28);
+  animation: ctaPulse 2.4s ease-in-out infinite;
+}
+.finale-cta:hover {
+  filter: brightness(1.06);
+}
+@keyframes ctaPulse {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 122, 92, 0.22);
+  }
+  50% {
+    box-shadow: 0 0 34px rgba(255, 196, 107, 0.5);
+  }
+}
+
+/* ===== trip-end finale ===== */
+.finale {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center 38%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+.finale-veil {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(19, 20, 39, 0.62) 0%,
+    rgba(19, 20, 39, 0.72) 45%,
+    rgba(19, 20, 39, 0.92) 100%
+  );
+}
+.finale-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 48px 24px 60px;
+  text-align: center;
+  animation: finaleRise 0.8s ease both;
+}
+@keyframes finaleRise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.finale-inner .eyebrow {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--amber);
+}
+.finale-title {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  font-size: clamp(30px, 6vw, 44px);
+  color: var(--coral);
+  letter-spacing: 1px;
+  margin: 8px 0 18px;
+}
+.finale-lines {
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--ink);
+  max-width: 500px;
+  margin: 0 auto 26px;
+}
+.finale-lines p {
+  margin: 0 0 12px;
+}
+.finale-lines em {
+  color: var(--lav);
+}
+.finale-shelf {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  margin: 0 auto 18px;
+}
+.finale-shelf .slot {
+  background: rgba(35, 36, 73, 0.72);
+  border-color: #4a4c7e;
+}
+.finale-pb {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 22px;
+}
+.finale-pb .pb-row {
+  display: flex;
+  gap: 6px;
+}
+.finale-pb .pb-label {
+  color: var(--lav);
+  font-family: 'Bricolage Grotesque', sans-serif;
+  letter-spacing: 0.5px;
+}
+.finale-stats {
+  font-size: 13.5px;
+  color: var(--dim);
+  margin: 0 0 22px;
+}
+.finale-stats b {
+  color: var(--amber);
+}
+.finale-close {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--ink);
+  max-width: 480px;
+  margin: 0 auto 6px;
+}
+.finale-close em {
+  color: var(--lav);
+}
+.finale-signoff {
+  font-family: 'Bricolage Grotesque', sans-serif;
+  color: var(--coral);
+  font-size: 16px;
+  letter-spacing: 1px;
+  margin-bottom: 28px;
+}
+.finale-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.finale-credit {
+  margin-top: 30px;
+  font-size: 12px;
+  color: #8a84b0;
+  line-height: 1.6;
+}
+.finale-credit em {
+  color: var(--lav);
+  font-style: italic;
+}
+@media (max-width: 460px) {
+  .finale-shelf {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -28,12 +28,21 @@ export default function Footer() {
           <ul className="space-y-2">
             {navLinks.map((l) => (
               <li key={l.href}>
-                <Link
-                  href={l.href}
-                  className="link-underline font-sans text-sm text-ink/70 hover:text-ink"
-                >
-                  {l.label}
-                </Link>
+                {'hardLink' in l && l.hardLink ? (
+                  <a
+                    href={l.href}
+                    className="link-underline font-sans text-sm text-ink/70 hover:text-ink"
+                  >
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={l.href}
+                    className="link-underline font-sans text-sm text-ink/70 hover:text-ink"
+                  >
+                    {l.label}
+                  </Link>
+                )}
               </li>
             ))}
           </ul>

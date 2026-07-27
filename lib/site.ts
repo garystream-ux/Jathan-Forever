@@ -17,11 +17,11 @@ export const site = {
       : 'https://jathanforever.com'),
   author: 'Gary Stream',
   bookTitle: "Ethan's Edge",
-  bookLink: '[PURCHASE / GOODREADS LINK]',
+  bookLink: 'https://www.goodreads.com/gary-stream',
   social: [
-    { label: 'Instagram', href: 'https://www.instagram.com/garystream' },
-    { label: 'TikTok', href: '#' },
-    { label: 'Goodreads', href: '#' },
+    { label: 'Instagram', href: 'https://www.instagram.com/foreverjathan/' },
+    { label: 'TikTok', href: 'https://www.tiktok.com/@jathanforever' },
+    { label: 'Goodreads', href: 'https://www.goodreads.com/gary-stream' },
   ],
 } as const;
 
@@ -31,4 +31,7 @@ export const navLinks = [
   { href: '/journal', label: 'Journal' },
   { href: '/gallery', label: 'Gallery' },
   { href: '/about', label: 'About' },
+  // Static Vite app served from public/game — needs a hard link, not a
+  // Next.js client navigation (there is no matching app route).
+  { href: '/game/', label: 'Game', hardLink: true },
 ] as const;

@@ -6,10 +6,10 @@
   "/images/stops/burlington/02.jpg":   { "by": "ethan", "caption": "The send-off committee. Abby made me an actual handwritten snack list." },
 
   "/images/stops/niagara-falls/cover.jpg": { "by": "jacob", "caption": "You hear it before you see it. Then you stop talking." },
-  "/images/stops/niagara-falls/01.jpg":    { "by": "jacob", "caption": "Soaked, freezing, and neither of us willing to leave." },
+  "/images/stops/niagara-falls/01.jpg":    { "by": "jacob", "caption": "Soaked through and neither of us willing to leave." },
   "/images/stops/niagara-falls/02.jpg":    { "by": "ethan", "caption": "He pretended the snow globe was dumb. He bought it anyway." },
 
-  "/images/stops/detroit/cover.jpg": { "by": "ethan", "caption": "Hitsville, U.S.A. I made us go in twice." },
+  "/images/stops/detroit/cover.jpg": { "by": "ethan", "caption": "Hitsville, U.S.A. We'll have to come back when the new space opens." },
   "/images/stops/detroit/01.jpg":    { "by": "ethan", "caption": "Coney dogs. A religious experience. No further notes." },
   "/images/stops/detroit/02.jpg":    { "by": "ethan", "caption": "Evidence: a handsome scarecrow attacked by bees. Vault material." },
 
@@ -17,7 +17,7 @@
   "/images/stops/chicago/01.jpg":    { "by": "jacob", "caption": "For one second the light off the lake looked exactly like home." },
   "/images/stops/chicago/02.jpg":    { "by": "ethan", "caption": "I ate deep dish like regular pizza. I regret nothing and everything." },
 
-  "/images/stops/st-paul/cover.jpg": { "by": "ethan", "caption": "A country road, an old oak tree, and a lot Jacob never had to say out loud." },
+  "/images/stops/st-paul/cover.jpg": { "by": "ethan", "caption": "A country road and an old oak tree. Jacob never had to say it out loud." },
   "/images/stops/st-paul/01.jpg":    { "by": "ethan", "caption": "I hung back until he reached for me. Then I was already there." },
   "/images/stops/st-paul/02.jpg":    { "by": "ethan", "caption": "Later, in the city, he laughed at something dumb I said. That's the one that mattered." },
 
@@ -25,9 +25,9 @@
   "/images/stops/badlands/01.jpg":    { "by": "jacob", "caption": "I didn't watch the sunrise much. I watched him watch it." },
   "/images/stops/badlands/02.jpg":    { "by": "jacob", "caption": "Nothing around for miles. Exactly what we came for." },
 
-  "/images/stops/rocky-mountain/cover.jpg": { "by": "ethan", "caption": "Too many stars. Honestly almost rude." },
+  "/images/stops/rocky-mountain/cover.jpg": { "by": "ethan", "caption": "So many freaking stars. Honestly almost rude." },
   "/images/stops/rocky-mountain/01.jpg":    { "by": "ethan", "caption": "Confidently naming two constellations to a man too kind to correct me." },
-  "/images/stops/rocky-mountain/02.jpg":    { "by": "ethan", "caption": "I packed wrong. Jacob dresses me. The running theme of this trip." },
+  "/images/stops/rocky-mountain/02.jpg":    { "by": "ethan", "caption": "Four jackets in the trunk. Still wearing his. The running theme of this trip." },
 
   "/images/stops/zion/cover.jpg": { "by": "jacob", "caption": "Two thousand feet of red rock. Ethan called it a metaphor. It is a canyon." },
   "/images/stops/zion/01.jpg":    { "by": "jacob", "caption": "Bawling at a rock formation in front of forty strangers, completely unbothered." },
@@ -38,6 +38,6 @@
   "/images/stops/las-vegas/02.jpg":    { "by": "ethan", "caption": "Three firework shows from one parking garage. He was right, as always." },
 
   "/images/stops/big-sur/cover.jpg": { "by": "jacob", "caption": "The road runs out right here. I'm glad it does." },
-  "/images/stops/big-sur/01.jpg":    { "by": "jacob", "caption": "Wearing the spare jacket he swore I'd never need. He runs warm, I run cold. We fit." },
+  "/images/stops/big-sur/01.jpg":    { "by": "jacob", "caption": "Wearing the spare jacket I swore I'd never need. He runs warm, I run cold. We fit." },
   "/images/stops/big-sur/02.jpg":    { "by": "ethan", "caption": "The snow globe survived all three thousand miles. It's going on the shelf." }
 }

@@ -59,21 +59,28 @@ export default function Nav() {
 
         {/* Desktop links */}
         <ul className="hidden items-center gap-8 md:flex">
-          {navLinks.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                aria-current={isActive(l.href) ? 'page' : undefined}
-                className={`link-underline font-sans text-sm tracking-wide transition-colors ${
-                  isActive(l.href)
-                    ? 'text-ink'
-                    : 'text-ink/60 hover:text-ink'
-                }`}
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
+          {navLinks.map((l) => {
+            const cls = `link-underline font-sans text-sm tracking-wide transition-colors ${
+              isActive(l.href) ? 'text-ink' : 'text-ink/60 hover:text-ink'
+            }`;
+            return (
+              <li key={l.href}>
+                {'hardLink' in l && l.hardLink ? (
+                  <a href={l.href} className={cls}>
+                    {l.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={l.href}
+                    aria-current={isActive(l.href) ? 'page' : undefined}
+                    className={cls}
+                  >
+                    {l.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         {/* Mobile toggle */}
@@ -117,22 +124,35 @@ export default function Nav() {
             className="border-t border-clay/15 bg-bone/95 backdrop-blur-md md:hidden"
           >
             <ul className="shell flex flex-col py-3">
-              {navLinks.map((l, i) => (
-                <li key={l.href}>
-                  <Link
-                    href={l.href}
-                    aria-current={isActive(l.href) ? 'page' : undefined}
-                    className={`flex items-baseline justify-between border-b border-clay/10 py-4 font-display text-2xl ${
-                      isActive(l.href) ? 'text-clay' : 'text-ink'
-                    }`}
-                  >
-                    {l.label}
-                    <span className="font-sans text-xs tabular-nums text-ink/30">
-                      0{i + 1}
-                    </span>
-                  </Link>
-                </li>
-              ))}
+              {navLinks.map((l, i) => {
+                const cls = `flex items-baseline justify-between border-b border-clay/10 py-4 font-display text-2xl ${
+                  isActive(l.href) ? 'text-clay' : 'text-ink'
+                }`;
+                const num = (
+                  <span className="font-sans text-xs tabular-nums text-ink/30">
+                    0{i + 1}
+                  </span>
+                );
+                return (
+                  <li key={l.href}>
+                    {'hardLink' in l && l.hardLink ? (
+                      <a href={l.href} className={cls}>
+                        {l.label}
+                        {num}
+                      </a>
+                    ) : (
+                      <Link
+                        href={l.href}
+                        aria-current={isActive(l.href) ? 'page' : undefined}
+                        className={cls}
+                      >
+                        {l.label}
+                        {num}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </motion.div>
         )}

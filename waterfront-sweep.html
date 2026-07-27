@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waterfront Sweep — Burlington Harbor | Wild Trivia Time Games</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#131427;
+    --panel:#1c1d38;
+    --panel-2:#232449;
+    --line:#323463;
+    --ink:#e8e4f2;
+    --dim:#9a94b8;
+    --coral:#ff7a5c;
+    --lav:#b7a8e0;
+    --amber:#ffc46b;
+    --red:#e2564f;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--bg);
+    background-image:radial-gradient(ellipse at 15% -10%, #232045 0%, transparent 55%),
+                     radial-gradient(ellipse at 95% 115%, #1b1733 0%, transparent 50%);
+    color:var(--ink);
+    font-family:'Instrument Sans', system-ui, sans-serif;
+    display:flex;justify-content:center;
+    padding:22px 12px;min-height:100vh;
+  }
+  .wrap{width:100%;max-width:1140px;}
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:12px;margin-bottom:14px;
+    border:1px solid var(--line);background:var(--panel);
+    border-radius:14px;padding:13px 20px;
+  }
+  .title-block h1{
+    font-family:'Bricolage Grotesque', sans-serif;font-size:25px;margin:0;
+    letter-spacing:1px;color:var(--coral);
+  }
+  .title-block .sub{font-size:12.5px;color:var(--dim);margin-top:2px;}
+  .hud{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  .pill{
+    font-family:'Bricolage Grotesque', sans-serif;font-size:14px;letter-spacing:.5px;
+    background:var(--panel-2);border:1px solid var(--line);
+    padding:6px 14px;border-radius:9px;color:var(--ink);
+  }
+  .pill b{color:var(--amber);}
+  button{
+    font-family:'Bricolage Grotesque', sans-serif;font-size:13px;letter-spacing:.5px;
+    cursor:pointer;padding:8px 17px;border-radius:9px;transition:transform .1s, background .15s;
+  }
+  button:active{transform:scale(.96);}
+  button:focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+  .btn-hint{background:var(--coral);border:none;color:#2a130c;font-weight:700;}
+  .btn-hint:disabled{background:#4a3040;color:#7d6a80;cursor:not-allowed;}
+  .btn-reset{background:transparent;border:1px solid var(--line);color:var(--ink);}
+  .btn-reset:hover{background:var(--panel-2);}
+  .game{display:flex;gap:14px;flex-wrap:wrap;}
+  .scene{flex:1 1 660px;min-width:320px;position:relative;}
+  svg{
+    width:100%;height:auto;display:block;border-radius:14px;
+    border:1px solid var(--line);background:#1b1d3f;cursor:crosshair;
+  }
+  .panel{
+    flex:0 1 250px;min-width:220px;
+    border:1px solid var(--line);background:var(--panel);
+    border-radius:14px;padding:16px;align-self:flex-start;
+  }
+  .panel h2{
+    font-family:'Bricolage Grotesque', sans-serif;font-size:13px;margin:0 0 10px;
+    letter-spacing:2px;color:var(--lav);text-transform:uppercase;
+  }
+  ul{list-style:none;margin:0;padding:0;font-size:13.5px;line-height:1.45;
+     columns:1;}
+  li{
+    padding:4px 0;border-bottom:1px dashed #272850;
+    display:flex;gap:8px;align-items:center;transition:opacity .3s;
+    break-inside:avoid;
+  }
+  li:last-child{border-bottom:none;}
+  li .ico{width:20px;text-align:center;flex:0 0 20px;}
+  li.done{opacity:.38;}
+  li.done .name{text-decoration:line-through;}
+  .msg{margin-top:12px;font-size:12.5px;min-height:20px;color:var(--dim);font-style:italic;}
+  .legend{margin-top:10px;font-size:11.5px;color:#6b668c;line-height:1.5;}
+  .win{
+    display:none;position:absolute;inset:0;border-radius:14px;
+    background:rgba(15,13,30,.8);align-items:center;justify-content:center;
+    backdrop-filter:blur(2px);
+  }
+  .win.show{display:flex;}
+  .win-card{
+    background:var(--panel);border:1px solid var(--coral);
+    border-radius:16px;padding:26px 40px;text-align:center;
+    box-shadow:0 0 46px rgba(255,122,92,.28);
+    animation:pop .4s ease;max-width:88%;
+  }
+  @keyframes pop{from{transform:scale(.8);opacity:0;}to{transform:scale(1);opacity:1;}}
+  .win-card .rank-label{font-size:11px;letter-spacing:3px;color:var(--dim);text-transform:uppercase;}
+  .win-card .rank{
+    font-family:'Bricolage Grotesque', sans-serif;font-size:27px;color:var(--coral);
+    letter-spacing:1px;margin:4px 0 10px;
+  }
+  .win-card .stats{font-size:13.5px;color:var(--ink);line-height:1.7;}
+  .win-card .stats b{color:var(--amber);}
+  .win-card button{margin-top:16px;}
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="title-block">
+      <h1>Waterfront Sweep</h1>
+      <div class="sub">Burlington Harbor &middot; golden hour &middot; 14 items lost along the water</div>
+    </div>
+    <div class="hud">
+      <span class="pill">⏱ <b id="timer">00:00</b></span>
+      <span class="pill">FOUND <b id="count">0/14</b></span>
+      <button class="btn-hint" id="hint">SPOT ×<span id="hints-left">4</span></button>
+      <button class="btn-reset" id="reset">RESET</button>
+    </div>
+  </header>
+
+  <div class="game">
+    <div class="scene">
+      <svg id="svg" viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" role="img"
+           aria-label="Burlington waterfront boardwalk at sunset. Lake Champlain and the Adirondacks in the distance, with a bench, tree, snack kiosk, picnic table, and Adirondack chairs. Fourteen objects are hidden in the scene.">
+        <defs>
+          <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1b1d3f"/>
+            <stop offset=".45" stop-color="#3a3566"/>
+            <stop offset=".75" stop-color="#8c5470"/>
+            <stop offset=".95" stop-color="#e8825c"/>
+          </linearGradient>
+          <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#7c5a7e"/>
+            <stop offset=".3" stop-color="#4d4574"/>
+            <stop offset="1" stop-color="#28294f"/>
+          </linearGradient>
+          <linearGradient id="wood" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#6e5138"/>
+            <stop offset="1" stop-color="#463323"/>
+          </linearGradient>
+          <radialGradient id="sunglow" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#ffd9a0" stop-opacity=".9"/>
+            <stop offset=".4" stop-color="#ffb56b" stop-opacity=".35"/>
+            <stop offset="1" stop-color="#ffb56b" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="lampglow" cx=".5" cy=".5" r=".5">
+            <stop offset="0" stop-color="#ffc46b" stop-opacity=".5"/>
+            <stop offset="1" stop-color="#ffc46b" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <!-- ===== SKY ===== -->
+        <rect x="0" y="0" width="1000" height="320" fill="url(#sky)"/>
+        <circle cx="380" cy="212" r="86" fill="url(#sunglow)"/>
+        <circle cx="380" cy="212" r="29" fill="#ffd9a0"/>
+        <!-- clouds -->
+        <g opacity=".8">
+          <ellipse cx="180" cy="90" rx="70" ry="12" fill="#4a4070"/>
+          <ellipse cx="205" cy="82" rx="45" ry="9" fill="#5c4a78"/>
+          <ellipse cx="640" cy="70" rx="90" ry="13" fill="#4a4070"/>
+          <ellipse cx="680" cy="62" rx="55" ry="9" fill="#6b5480"/>
+          <ellipse cx="560" cy="150" rx="75" ry="9" fill="#8c5a72" opacity=".8"/>
+          <ellipse cx="850" cy="120" rx="60" ry="10" fill="#5c4a78"/>
+        </g>
+        <!-- flying gulls -->
+        <g stroke="#d8d4e6" stroke-width="2" fill="none" opacity=".75">
+          <path d="M498 118 q6 -7 12 0 q6 -7 12 0"/>
+          <path d="M545 142 q5 -6 10 0 q5 -6 10 0"/>
+        </g>
+
+        <!-- ===== ADIRONDACKS ===== -->
+        <polygon points="0,238 60,205 140,228 230,196 320,226 420,204 520,230 610,200 720,228 820,206 920,230 1000,212 1000,240 0,240" fill="#4a3f6b"/>
+        <polygon points="0,240 90,222 190,240 300,220 400,238 500,222 620,240 740,220 860,238 1000,226 1000,242 0,242" fill="#33305c"/>
+
+        <!-- ===== LAKE ===== -->
+        <rect x="0" y="240" width="1000" height="150" fill="url(#water)"/>
+        <g stroke="#8a76a0" stroke-width="1.5" opacity=".22">
+          <path d="M0 262 h1000"/><path d="M0 285 h1000"/><path d="M0 310 h1000"/>
+          <path d="M0 336 h1000"/><path d="M0 362 h1000"/>
+        </g>
+        <!-- sun glitter path -->
+        <g fill="#ffc46b">
+          <rect x="362" y="252" width="34" height="3" opacity=".8" rx="1.5"/>
+          <rect x="370" y="262" width="22" height="3" opacity=".65" rx="1.5"/>
+          <rect x="356" y="273" width="40" height="3" opacity=".55" rx="1.5"/>
+          <rect x="372" y="285" width="20" height="3" opacity=".5" rx="1.5"/>
+          <rect x="360" y="297" width="36" height="3" opacity=".4" rx="1.5"/>
+          <rect x="368" y="311" width="26" height="3" opacity=".35" rx="1.5"/>
+          <rect x="354" y="326" width="44" height="3" opacity=".28" rx="1.5"/>
+          <rect x="366" y="344" width="30" height="3" opacity=".22" rx="1.5"/>
+        </g>
+
+        <!-- breakwater lighthouse -->
+        <rect x="130" y="234" width="70" height="6" fill="#2a2648"/>
+        <rect x="156" y="210" width="12" height="26" fill="#d8d0dc"/>
+        <rect x="154" y="206" width="16" height="6" fill="#a34a44"/>
+        <rect x="159" y="199" width="6" height="8" fill="#241f33"/>
+        <circle cx="162" cy="203" r="2" fill="#ffc46b"/>
+
+        <!-- sailboats -->
+        <g>
+          <path d="M600 268 l22 -46 l4 46 z" fill="#e8e0ea"/>
+          <path d="M632 268 l-2 -34 l18 34 z" fill="#cfc4d8"/>
+          <rect x="596" y="268" width="58" height="9" rx="4" fill="#2a2648"/>
+          <path d="M622 282 q2 14 -2 26 M630 282 q-1 12 2 22" stroke="#d8d4e6" stroke-width="1.5" opacity=".2" fill="none"/>
+        </g>
+        <g opacity=".85">
+          <path d="M252 254 l10 -20 l2 20 z" fill="#cfc4d8"/>
+          <rect x="248" y="254" width="24" height="5" rx="2.5" fill="#2a2648"/>
+        </g>
+
+        <!-- HIDDEN 5: toy sailboat adrift in the sun glitter -->
+        <g id="obj-boat" aria-hidden="true">
+          <path d="M362 296 l7 -13 l1.5 13 z" fill="#f0e0d0"/>
+          <path d="M358 296 h16 l-3 5 h-10 z" fill="#7a4a52"/>
+        </g>
+
+        <!-- HIDDEN 6: mallard duck in the dark water -->
+        <g id="obj-duck" aria-hidden="true">
+          <ellipse cx="702" cy="332" rx="12" ry="7" fill="#2f3158"/>
+          <circle cx="712" cy="324" r="5" fill="#33355e"/>
+          <path d="M717 324 l7 1.5 l-7 2 z" fill="#5c5040"/>
+          <path d="M686 334 a18 6 0 0 0 34 3" stroke="#8a76a0" stroke-width="1" fill="none" opacity=".3"/>
+        </g>
+
+        <!-- ===== BOARDWALK ===== -->
+        <rect x="0" y="388" width="1000" height="232" fill="url(#wood)"/>
+        <g stroke="#3a2b1e" stroke-width="2">
+          <path d="M0 412 h1000 M0 440 h1000 M0 472 h1000 M0 508 h1000 M0 548 h1000 M0 590 h1000"/>
+        </g>
+        <g stroke="#3a2b1e" stroke-width="1.5" opacity=".7">
+          <path d="M160 388 L120 620 M330 388 L310 620 M500 388 L500 620 M670 388 L692 620 M840 388 L880 620"/>
+        </g>
+        <g stroke="#7d5f42" stroke-width="1" opacity=".4">
+          <path d="M40 424 h70 M210 456 h90 M420 492 h80 M560 424 h60 M760 460 h90 M120 530 h100 M620 570 h120 M300 600 h90"/>
+        </g>
+
+        <!-- ===== RAILING (along the water) ===== -->
+        <g fill="#503c2b">
+          <rect x="34" y="350" width="9" height="44"/><rect x="134" y="350" width="9" height="44"/>
+          <rect x="234" y="350" width="9" height="44"/><rect x="434" y="350" width="9" height="44"/>
+          <rect x="534" y="350" width="9" height="44"/><rect x="634" y="350" width="9" height="44"/>
+          <rect x="734" y="350" width="9" height="44"/>
+        </g>
+        <rect x="0" y="354" width="770" height="6" fill="#5c4430"/>
+        <rect x="0" y="374" width="770" height="5" fill="#54402c"/>
+        <g fill="#5c4430">
+          <rect x="30" y="346" width="17" height="5" rx="2"/><rect x="130" y="346" width="17" height="5" rx="2"/>
+          <rect x="230" y="346" width="17" height="5" rx="2"/><rect x="430" y="346" width="17" height="5" rx="2"/>
+          <rect x="530" y="346" width="17" height="5" rx="2"/><rect x="630" y="346" width="17" height="5" rx="2"/>
+          <rect x="730" y="346" width="17" height="5" rx="2"/>
+        </g>
+
+        <!-- HIDDEN 11: camera resting on a railing post cap -->
+        <g id="obj-camera" aria-hidden="true">
+          <rect x="130" y="336" width="17" height="11" rx="2" fill="#2a2440"/>
+          <circle cx="138" cy="341" r="3.5" fill="#171326" stroke="#4a4068" stroke-width="1"/>
+          <rect x="133" y="333" width="6" height="4" rx="1" fill="#2a2440"/>
+        </g>
+
+        <!-- life ring decoy on railing -->
+        <circle cx="520" cy="364" r="12" fill="#d8d0dc"/>
+        <circle cx="520" cy="364" r="12" fill="none" stroke="#a34a44" stroke-width="4" stroke-dasharray="6 8"/>
+        <circle cx="520" cy="364" r="5" fill="#3a3566"/>
+
+        <!-- standing gull decoy -->
+        <g>
+          <ellipse cx="600" cy="342" rx="9" ry="6" fill="#d8d4e6"/>
+          <circle cx="608" cy="335" r="4" fill="#d8d4e6"/>
+          <path d="M612 335 l5 1 l-5 1.5 z" fill="#d99a4e"/>
+          <path d="M600 348 v6 M604 348 v6" stroke="#d99a4e" stroke-width="1.5"/>
+        </g>
+
+        <!-- HIDDEN 4: fishing rod leaning along the railing -->
+        <g id="obj-rod" aria-hidden="true">
+          <path d="M700 392 L772 334" stroke="#5a4430" stroke-width="3" stroke-linecap="round"/>
+          <path d="M772 334 q6 -4 10 -2" stroke="#5a4430" stroke-width="2" fill="none"/>
+          <circle cx="712" cy="384" r="4.5" fill="none" stroke="#4a3626" stroke-width="2.5"/>
+          <path d="M770 336 q3 10 -1 18" stroke="#8a76a0" stroke-width=".8" fill="none" opacity=".6"/>
+        </g>
+
+        <!-- bicycle decoy leaning on railing -->
+        <g stroke="#241f33" stroke-width="2.5" fill="none">
+          <circle cx="72" cy="372" r="15"/>
+          <circle cx="116" cy="372" r="15"/>
+          <path d="M72 372 L90 350 L116 372 M90 350 L84 372 M84 372 h32 M88 344 h10 M112 352 l8 -5"/>
+        </g>
+
+        <!-- ===== TREE (left) ===== -->
+        <rect x="74" y="384" width="56" height="13" fill="#241f33"/>
+        <path d="M98 392 C96 350 100 300 102 258 L112 258 C112 300 108 350 110 392 z" fill="#3a2c33"/>
+        <path d="M104 300 L82 268 M106 280 L132 252 M103 320 L84 300" stroke="#3a2c33" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="85" cy="215" r="48" fill="#4a4468"/>
+        <circle cx="60" cy="180" r="36" fill="#524b6e"/>
+        <circle cx="105" cy="160" r="45" fill="#5f5578"/>
+        <circle cx="140" cy="195" r="52" fill="#575070"/>
+        <circle cx="160" cy="230" r="38" fill="#4a4468"/>
+        <circle cx="168" cy="172" r="30" fill="#8a5f6d"/>
+        <circle cx="178" cy="208" r="24" fill="#9c6a6b"/>
+        <!-- HIDDEN 10: frisbee lodged in the sunset-lit leaves -->
+        <g id="obj-frisbee" aria-hidden="true">
+          <circle cx="150" cy="190" r="11" fill="#c4766a"/>
+          <circle cx="150" cy="190" r="6.5" fill="none" stroke="#a35a52" stroke-width="2"/>
+        </g>
+        <circle cx="133" cy="206" r="25" fill="#575070"/>
+        <circle cx="120" cy="240" r="26" fill="#443e60"/>
+
+        <!-- ===== LAMPPOST ===== -->
+        <circle cx="238" cy="248" r="30" fill="url(#lampglow)"/>
+        <rect x="226" y="388" width="24" height="10" rx="2" fill="#241f33"/>
+        <rect x="234" y="262" width="7" height="128" fill="#2f2b45"/>
+        <rect x="229" y="378" width="17" height="5" rx="1" fill="#2f2b45"/>
+        <polygon points="226,262 250,262 246,240 230,240" fill="#2f2b45"/>
+        <rect x="231" y="244" width="14" height="15" fill="#ffc46b" opacity=".9"/>
+        <rect x="228" y="236" width="20" height="5" rx="2" fill="#241f33"/>
+        <!-- HIDDEN 8: coffee cup on the lamppost ledge -->
+        <g id="obj-cup" aria-hidden="true">
+          <path d="M247 366 h12 l-1.5 14 h-9 z" fill="#4c3826"/>
+          <rect x="248" y="371" width="10" height="5" fill="#6b5138"/>
+          <rect x="245.5" y="364" width="15" height="3" rx="1.5" fill="#3a2b1e"/>
+        </g>
+
+        <!-- ===== BENCH ===== -->
+        <g>
+          <rect x="300" y="328" width="8" height="72" fill="#5c4430"/>
+          <rect x="384" y="328" width="8" height="72" fill="#5c4430"/>
+          <rect x="296" y="332" width="100" height="7" rx="2" fill="#7a5a40"/>
+          <rect x="296" y="343" width="100" height="7" rx="2" fill="#7a5a40"/>
+          <rect x="292" y="358" width="108" height="8" rx="2" fill="#8f6b4b"/>
+          <rect x="292" y="356.5" width="108" height="2" fill="#c4766a" opacity=".55"/>
+          <rect x="292" y="369" width="108" height="7" rx="2" fill="#7a5a40"/>
+          <rect x="302" y="378" width="7" height="24" fill="#5c4430"/>
+          <rect x="384" y="378" width="7" height="24" fill="#5c4430"/>
+        </g>
+        <!-- HIDDEN 1: a coral-covered paperback left on the bench -->
+        <g id="obj-book" aria-hidden="true">
+          <g transform="rotate(-4 370 354)">
+            <rect x="357" y="349" width="26" height="9" rx="1.5" fill="#e85d43"/>
+            <rect x="380" y="350" width="3" height="7" fill="#e8d9c2"/>
+            <rect x="360" y="352" width="12" height="1.5" fill="#8f3526" opacity=".8"/>
+          </g>
+        </g>
+        <!-- HIDDEN 7: skateboard tucked under the bench -->
+        <ellipse cx="345" cy="405" rx="32" ry="7" fill="#1a1626" opacity=".8"/>
+        <g id="obj-skate" aria-hidden="true">
+          <rect x="322" y="394" width="46" height="6" rx="3" fill="#3a2e3f"/>
+          <rect x="328" y="399" width="4" height="3" fill="#241f33"/>
+          <rect x="356" y="399" width="4" height="3" fill="#241f33"/>
+          <circle cx="330" cy="403" r="4" fill="#55506e"/>
+          <circle cx="358" cy="403" r="4" fill="#55506e"/>
+        </g>
+
+        <!-- ===== ADIRONDACK CHAIRS ===== -->
+        <g>
+          <ellipse cx="452" cy="486" rx="40" ry="8" fill="#1a1626" opacity=".6"/>
+          <path d="M428 420 q24 -10 48 0 l-4 52 h-40 z" fill="#46617a"/>
+          <path d="M438 421 v48 M450 418 v51 M462 418 v51 M474 421 v48" stroke="#334a5e" stroke-width="2"/>
+          <rect x="418" y="450" width="18" height="7" rx="3" fill="#527089"/>
+          <rect x="468" y="450" width="18" height="7" rx="3" fill="#527089"/>
+          <rect x="424" y="470" width="7" height="20" fill="#334a5e"/>
+          <rect x="472" y="470" width="7" height="20" fill="#334a5e"/>
+        </g>
+        <g>
+          <ellipse cx="530" cy="500" rx="40" ry="8" fill="#1a1626" opacity=".6"/>
+          <path d="M506 432 q24 -10 48 0 l-4 54 h-40 z" fill="#3f5870"/>
+          <path d="M516 433 v50 M528 430 v53 M540 430 v53 M552 433 v50" stroke="#2e4356" stroke-width="2"/>
+          <rect x="496" y="464" width="18" height="7" rx="3" fill="#4b667e"/>
+          <rect x="546" y="464" width="18" height="7" rx="3" fill="#4b667e"/>
+          <rect x="502" y="484" width="7" height="20" fill="#2e4356"/>
+          <rect x="550" y="484" width="7" height="20" fill="#2e4356"/>
+        </g>
+        <!-- dog decoy -->
+        <g>
+          <ellipse cx="398" cy="528" rx="26" ry="11" fill="#a3785a"/>
+          <circle cx="376" cy="522" r="9" fill="#a3785a"/>
+          <polygon points="370,515 371,507 376,514" fill="#8a6248"/>
+          <path d="M420 528 q12 -3 10 -14" stroke="#a3785a" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <circle cx="373" cy="521" r="1.3" fill="#241f33"/>
+        </g>
+
+        <!-- ===== PICNIC TABLE ===== -->
+        <g>
+          <ellipse cx="632" cy="510" rx="85" ry="10" fill="#1a1626" opacity=".55"/>
+          <path d="M578 452 L560 500 M688 452 L706 500 M596 452 L586 476 M670 452 L680 476" stroke="#4c3826" stroke-width="5"/>
+          <rect x="560" y="428" width="146" height="22" rx="3" fill="#8f6b4b"/>
+          <path d="M560 435 h146 M560 442 h146" stroke="#6e5138" stroke-width="1.5"/>
+          <rect x="560" y="427" width="146" height="2" fill="#c4766a" opacity=".45"/>
+          <rect x="544" y="478" width="80" height="10" rx="2" fill="#7a5a40"/>
+          <rect x="644" y="478" width="80" height="10" rx="2" fill="#7a5a40"/>
+        </g>
+        <!-- HIDDEN 3: folded sunglasses at the shaded end of the table -->
+        <g id="obj-shades" aria-hidden="true">
+          <g transform="rotate(-6 682 424)">
+            <circle cx="676" cy="424" r="4.5" fill="#241f33"/>
+            <circle cx="687" cy="424" r="4.5" fill="#241f33"/>
+            <path d="M680 424 h3.5 M671 423 l-8 -2" stroke="#241f33" stroke-width="2" fill="none"/>
+          </g>
+        </g>
+        <!-- HIDDEN 12: folded trail map on the picnic bench -->
+        <g id="obj-map" aria-hidden="true">
+          <g transform="rotate(7 588 480)">
+            <rect x="578" y="474" width="21" height="13" rx="1" fill="#c9b28a"/>
+            <path d="M585 474 v13 M592 474 v13" stroke="#a38f6b" stroke-width="1"/>
+            <circle cx="595" cy="478" r="1.5" fill="#a34a44"/>
+          </g>
+        </g>
+        <!-- cooler decoy -->
+        <rect x="626" y="524" width="36" height="24" rx="3" fill="#6b3f4d"/>
+        <rect x="626" y="524" width="36" height="7" rx="3" fill="#7d4c5c"/>
+        <rect x="638" y="520" width="12" height="4" rx="2" fill="#54303c"/>
+
+        <!-- ===== SNACK KIOSK (right) ===== -->
+        <g>
+          <ellipse cx="868" cy="434" rx="110" ry="12" fill="#1a1626" opacity=".55"/>
+          <rect x="765" y="298" width="200" height="134" fill="#574a72"/>
+          <path d="M765 298 v134 M805 298 v134 M845 298 v134 M885 298 v134 M925 298 v134 M965 298 v134" stroke="#4a3f63" stroke-width="2"/>
+          <polygon points="753,300 977,300 955,258 775,258" fill="#2f2b45"/>
+          <rect x="810" y="268" width="118" height="24" rx="3" fill="#241f33"/>
+          <text x="869" y="285" text-anchor="middle" font-family="'Bricolage Grotesque', sans-serif" font-size="15" letter-spacing="4" fill="#ff7a5c">SCOOPS</text>
+          <!-- service window w/ awning -->
+          <rect x="800" y="330" width="92" height="56" fill="#241f33"/>
+          <path d="M796 330 h100 l-6 -16 h-88 z" fill="#c4766a"/>
+          <path d="M808 315 l4 15 M824 315 l3 15 M840 314 l2 16 M856 314 l1 16 M872 315 l-1 15" stroke="#8f4a44" stroke-width="3"/>
+          <rect x="800" y="382" width="92" height="6" fill="#3a3258"/>
+          <!-- menu board -->
+          <rect x="928" y="336" width="28" height="40" rx="2" fill="#241f33"/>
+          <path d="M932 344 h20 M932 352 h16 M932 360 h20 M932 368 h13" stroke="#6b668c" stroke-width="2"/>
+          <!-- planter -->
+          <rect x="770" y="410" width="52" height="20" rx="2" fill="#3a3258"/>
+          <path d="M778 410 q-2 -10 3 -14 M790 410 q0 -12 5 -15 M804 410 q2 -10 -2 -15" stroke="#5f7a5c" stroke-width="2.5" fill="none"/>
+          <!-- string lights -->
+          <path d="M765 302 q50 14 100 2 q50 -12 100 4" stroke="#3a3258" stroke-width="1.5" fill="none"/>
+          <g fill="#ffc46b">
+            <circle cx="785" cy="306" r="2.5"/><circle cx="815" cy="310" r="2.5"/><circle cx="845" cy="309" r="2.5"/>
+            <circle cx="875" cy="304" r="2.5"/><circle cx="905" cy="302" r="2.5"/><circle cx="935" cy="305" r="2.5"/>
+          </g>
+          <g fill="#ffc46b" opacity=".25">
+            <circle cx="785" cy="306" r="5.5"/><circle cx="815" cy="310" r="5.5"/><circle cx="845" cy="309" r="5.5"/>
+            <circle cx="875" cy="304" r="5.5"/><circle cx="905" cy="302" r="5.5"/><circle cx="935" cy="305" r="5.5"/>
+          </g>
+        </g>
+        <!-- HIDDEN 9: brass key on a nail beside the service window -->
+        <g id="obj-key" aria-hidden="true">
+          <circle cx="782" cy="352" r="1.5" fill="#6b668c"/>
+          <circle cx="782" cy="357" r="4" fill="none" stroke="#8a7a4e" stroke-width="2"/>
+          <path d="M782 361 v9 M782 368 h3.5 M782 364.5 h2.5" stroke="#8a7a4e" stroke-width="2"/>
+        </g>
+        <!-- HIDDEN 2: dropped ice-cream cone on the boardwalk -->
+        <g id="obj-cone" aria-hidden="true">
+          <ellipse cx="744" cy="530" rx="14" ry="4.5" fill="#9c8ab8" opacity=".85"/>
+          <ellipse cx="740" cy="527" rx="7" ry="4" fill="#b7a8e0"/>
+          <polygon points="746,526 768,514 754,532" fill="#b98a5a"/>
+          <path d="M752 524 l10 -5 M750 528 l12 -4" stroke="#96683e" stroke-width="1"/>
+        </g>
+
+        <!-- HIDDEN 13: rope coil on the dock planks -->
+        <g id="obj-rope" aria-hidden="true">
+          <ellipse cx="62" cy="470" rx="16" ry="7" fill="none" stroke="#8a6b4a" stroke-width="3"/>
+          <ellipse cx="62" cy="470" rx="10.5" ry="4.5" fill="none" stroke="#8a6b4a" stroke-width="3"/>
+          <ellipse cx="62" cy="470" rx="5" ry="2" fill="none" stroke="#8a6b4a" stroke-width="2.5"/>
+          <path d="M76 474 q10 3 14 1" stroke="#8a6b4a" stroke-width="3" fill="none"/>
+        </g>
+
+        <!-- cleat + HIDDEN 14: gull feather beside it -->
+        <g>
+          <rect x="440" y="396" width="22" height="5" rx="2.5" fill="#9a94ad"/>
+          <rect x="448" y="392" width="6" height="9" fill="#9a94ad"/>
+        </g>
+        <g id="obj-feather" aria-hidden="true">
+          <path d="M468 402 q10 -6 16 2 q-8 6 -16 -2 z" fill="#cfc9da"/>
+          <path d="M468 402 q9 -2 15 3" stroke="#a8a2ba" stroke-width="1" fill="none"/>
+        </g>
+
+        <!-- ===== INVISIBLE HIT LAYER (drawn last: occlusion can't steal clicks) ===== -->
+        <g id="hits">
+          <circle class="hit" data-target="obj-book"    data-x="370" data-y="354" cx="370" cy="354" r="16" tabindex="0" aria-label="hidden paperback book"/>
+          <circle class="hit" data-target="obj-cone"    data-x="750" data-y="524" cx="750" cy="524" r="18" tabindex="0" aria-label="hidden ice cream cone"/>
+          <circle class="hit" data-target="obj-shades"  data-x="680" data-y="424" cx="680" cy="424" r="15" tabindex="0" aria-label="hidden sunglasses"/>
+          <line   class="hit" data-target="obj-rod"     data-x="736" data-y="363" x1="700" y1="392" x2="772" y2="334" stroke-width="18" stroke="#fff" stroke-opacity="0" tabindex="0" aria-label="hidden fishing rod"/>
+          <circle class="hit" data-target="obj-boat"    data-x="366" data-y="292" cx="366" cy="292" r="15" tabindex="0" aria-label="hidden toy sailboat"/>
+          <circle class="hit" data-target="obj-duck"    data-x="704" data-y="329" cx="704" cy="329" r="16" tabindex="0" aria-label="hidden duck"/>
+          <rect   class="hit" data-target="obj-skate"   data-x="345" data-y="399" x="316" y="388" width="58" height="22" tabindex="0" aria-label="hidden skateboard"/>
+          <circle class="hit" data-target="obj-cup"     data-x="253" data-y="373" cx="253" cy="373" r="14" tabindex="0" aria-label="hidden coffee cup"/>
+          <circle class="hit" data-target="obj-key"     data-x="782" data-y="360" cx="782" cy="360" r="14" tabindex="0" aria-label="hidden brass key"/>
+          <circle class="hit" data-target="obj-frisbee" data-x="150" data-y="190" cx="150" cy="190" r="15" tabindex="0" aria-label="hidden frisbee"/>
+          <circle class="hit" data-target="obj-camera"  data-x="138" data-y="341" cx="138" cy="341" r="14" tabindex="0" aria-label="hidden camera"/>
+          <circle class="hit" data-target="obj-map"     data-x="590" data-y="481" cx="590" cy="481" r="15" tabindex="0" aria-label="hidden folded map"/>
+          <circle class="hit" data-target="obj-rope"    data-x="64"  data-y="470" cx="64"  cy="470" r="18" tabindex="0" aria-label="hidden rope coil"/>
+          <circle class="hit" data-target="obj-feather" data-x="476" data-y="402" cx="476" cy="402" r="13" tabindex="0" aria-label="hidden feather"/>
+        </g>
+
+        <g id="overlay" pointer-events="none"></g>
+      </svg>
+
+      <div class="win" id="win">
+        <div class="win-card">
+          <div class="rank-label">Sweep complete &middot; harbor rank</div>
+          <div class="rank" id="rank">DOCK CAPTAIN</div>
+          <div class="stats" id="win-stats"></div>
+          <button class="btn-hint" id="again">RUN IT BACK</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <h2>Lost &amp; Found Ledger</h2>
+      <ul id="list">
+        <li data-id="obj-book"><span class="ico">📕</span><span class="name">Paperback book</span></li>
+        <li data-id="obj-cone"><span class="ico">🍦</span><span class="name">Dropped ice cream</span></li>
+        <li data-id="obj-shades"><span class="ico">🕶️</span><span class="name">Sunglasses</span></li>
+        <li data-id="obj-rod"><span class="ico">🎣</span><span class="name">Fishing rod</span></li>
+        <li data-id="obj-boat"><span class="ico">⛵</span><span class="name">Toy sailboat</span></li>
+        <li data-id="obj-duck"><span class="ico">🦆</span><span class="name">Mallard duck</span></li>
+        <li data-id="obj-skate"><span class="ico">🛹</span><span class="name">Skateboard</span></li>
+        <li data-id="obj-cup"><span class="ico">☕</span><span class="name">Coffee cup</span></li>
+        <li data-id="obj-key"><span class="ico">🔑</span><span class="name">Brass key</span></li>
+        <li data-id="obj-frisbee"><span class="ico">🥏</span><span class="name">Frisbee</span></li>
+        <li data-id="obj-camera"><span class="ico">📷</span><span class="name">Camera</span></li>
+        <li data-id="obj-map"><span class="ico">🗺️</span><span class="name">Folded map</span></li>
+        <li data-id="obj-rope"><span class="ico">🪢</span><span class="name">Rope coil</span></li>
+        <li data-id="obj-feather"><span class="ico">🪶</span><span class="name">Gull feather</span></li>
+      </ul>
+      <div class="msg" id="msg"></div>
+      <div class="legend">Misclicks add +5s. Spots are limited — the sun won't wait.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  var svg = document.getElementById('svg');
+  var overlay = document.getElementById('overlay');
+  var listItems = document.querySelectorAll('#list li');
+  var countEl = document.getElementById('count');
+  var timerEl = document.getElementById('timer');
+  var msgEl = document.getElementById('msg');
+  var winEl = document.getElementById('win');
+  var rankEl = document.getElementById('rank');
+  var winStats = document.getElementById('win-stats');
+  var hintBtn = document.getElementById('hint');
+  var hintsLeftEl = document.getElementById('hints-left');
+
+  var hits = Array.prototype.slice.call(document.querySelectorAll('.hit'));
+  var ids = hits.map(function(h){ return h.getAttribute('data-target'); });
+  var pos = {};
+  hits.forEach(function(h){
+    pos[h.getAttribute('data-target')] = {
+      x: parseFloat(h.getAttribute('data-x')),
+      y: parseFloat(h.getAttribute('data-y'))
+    };
+    if (h.tagName.toLowerCase() !== 'line'){
+      h.setAttribute('fill', '#fff');
+      h.setAttribute('fill-opacity', '0');
+    }
+    h.setAttribute('pointer-events', 'all');
+    h.style.cursor = 'crosshair';
+    h.style.outline = 'none';
+  });
+
+  var quips = ["Logged in the ledger.","Eagle eyes. Or gull eyes.","Found before sundown.",
+               "The lake gives it back.","Nothing slips past you.","Recovered — no questions asked."];
+  var missQuips = ["Just dock planks.","Nope — ask the gulls.","That's a shadow with confidence.",
+                   "The lake keeps its secrets. (+5s)","Squint harder, sailor."];
+
+  var found = {}, seconds = 0, misclicks = 0, hintsLeft = 4, timerId = null, done = false;
+  var TOTAL_HINTS = 4;
+
+  function fmt(s){
+    var m = Math.floor(s/60), r = s%60;
+    return (m<10?'0':'')+m+':'+(r<10?'0':'')+r;
+  }
+  function tick(){ seconds++; timerEl.textContent = fmt(seconds); }
+  function startTimer(){ if (!timerId && !done) timerId = setInterval(tick, 1000); }
+  function stopTimer(){ clearInterval(timerId); timerId = null; }
+  function foundCount(){ return Object.keys(found).length; }
+  function updateCount(){ countEl.textContent = foundCount() + '/' + ids.length; }
+
+  function ring(x, y, color, width, r){
+    var c = document.createElementNS(SVGNS, 'circle');
+    c.setAttribute('cx', x); c.setAttribute('cy', y); c.setAttribute('r', r || 20);
+    c.setAttribute('fill', 'none'); c.setAttribute('stroke', color);
+    c.setAttribute('stroke-width', width);
+    c.style.filter = 'drop-shadow(0 0 5px rgba(255,196,107,.6))';
+    overlay.appendChild(c);
+    return c;
+  }
+
+  function floatText(x, y, text, color){
+    var t = document.createElementNS(SVGNS, 'text');
+    t.setAttribute('x', x); t.setAttribute('y', y);
+    t.setAttribute('fill', color);
+    t.setAttribute('font-size', '15');
+    t.setAttribute('font-family', "'Bricolage Grotesque', sans-serif");
+    t.setAttribute('font-weight', '700');
+    t.setAttribute('text-anchor', 'middle');
+    t.textContent = text;
+    overlay.appendChild(t);
+    var dy = 0, o = 1;
+    var iv = setInterval(function(){
+      dy -= 1.4; o -= 0.06;
+      t.setAttribute('y', y + dy);
+      t.setAttribute('opacity', Math.max(o, 0));
+      if (o <= 0){ clearInterval(iv); t.remove(); }
+    }, 40);
+  }
+
+  function markFound(id){
+    if (found[id] || done) return;
+    startTimer();
+    found[id] = true;
+    var p = pos[id];
+    ring(p.x, p.y, '#ffffff', 3);
+    ring(p.x, p.y, '#ffc46b', 1.8, 20);
+    listItems.forEach(function(li){
+      if (li.getAttribute('data-id') === id) li.classList.add('done');
+    });
+    msgEl.textContent = quips[Math.floor(Math.random() * quips.length)];
+    updateCount();
+    if (foundCount() === ids.length) finish();
+  }
+
+  function finish(){
+    done = true;
+    stopTimer();
+    var total = seconds;
+    var rank = total < 120 ? 'HARBOR MASTER'
+             : total < 200 ? 'DOCK CAPTAIN'
+             : total < 300 ? 'FIRST MATE'
+             : 'LANDLUBBER (PROMISING)';
+    rankEl.textContent = rank;
+    winStats.innerHTML = 'Time: <b>' + fmt(total) + '</b> &nbsp;&middot;&nbsp; Spots used: <b>' +
+      (TOTAL_HINTS - hintsLeft) + '/' + TOTAL_HINTS + '</b> &nbsp;&middot;&nbsp; Misclicks: <b>' + misclicks + '</b>';
+    setTimeout(function(){ winEl.classList.add('show'); }, 400);
+  }
+
+  hits.forEach(function(el){
+    el.addEventListener('click', function(ev){
+      ev.stopPropagation();
+      markFound(el.getAttribute('data-target'));
+    });
+    el.addEventListener('keydown', function(ev){
+      if (ev.key === 'Enter' || ev.key === ' '){
+        ev.preventDefault();
+        markFound(el.getAttribute('data-target'));
+      }
+    });
+  });
+
+  function svgPoint(ev){
+    var pt = svg.createSVGPoint();
+    pt.x = ev.clientX; pt.y = ev.clientY;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+
+  svg.addEventListener('click', function(ev){
+    if (done) return;
+    startTimer();
+    var p = svgPoint(ev);
+    var rip = ring(p.x, p.y, '#e2564f', 2, 6);
+    rip.style.filter = 'none';
+    var r = 6, o = 0.8;
+    var t = setInterval(function(){
+      r += 2.4; o -= 0.08;
+      rip.setAttribute('r', r);
+      rip.setAttribute('opacity', Math.max(o, 0));
+      if (o <= 0){ clearInterval(t); rip.remove(); }
+    }, 30);
+    misclicks++;
+    seconds += 5;
+    timerEl.textContent = fmt(seconds);
+    floatText(p.x, Math.max(p.y - 14, 16), '+5s', '#e2564f');
+    msgEl.textContent = missQuips[Math.floor(Math.random() * missQuips.length)];
+  });
+
+  hintBtn.addEventListener('click', function(){
+    if (hintsLeft <= 0 || done) return;
+    var remaining = ids.filter(function(id){ return !found[id]; });
+    if (!remaining.length) return;
+    startTimer();
+    hintsLeft--;
+    hintsLeftEl.textContent = hintsLeft;
+    if (hintsLeft === 0) hintBtn.disabled = true;
+    var id = remaining[Math.floor(Math.random() * remaining.length)];
+    var p = pos[id];
+    var pulse = ring(p.x, p.y, '#ff7a5c', 3, 30);
+    var n = 0;
+    var t = setInterval(function(){
+      n++;
+      pulse.setAttribute('opacity', n % 2 ? '0.1' : '0.9');
+      if (n > 7){ clearInterval(t); pulse.remove(); }
+    }, 220);
+    msgEl.textContent = 'Something glinted over there...';
+  });
+
+  function reset(){
+    found = {}; seconds = 0; misclicks = 0; hintsLeft = TOTAL_HINTS; done = false;
+    stopTimer();
+    timerEl.textContent = fmt(0);
+    hintsLeftEl.textContent = hintsLeft;
+    hintBtn.disabled = false;
+    overlay.innerHTML = '';
+    winEl.classList.remove('show');
+    msgEl.textContent = '';
+    listItems.forEach(function(li){ li.classList.remove('done'); });
+    updateCount();
+  }
+  document.getElementById('reset').addEventListener('click', reset);
+  document.getElementById('again').addEventListener('click', reset);
+
+  updateCount();
+})();
+</script>
+</body>
+</html>

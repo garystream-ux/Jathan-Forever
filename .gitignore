@@ -1,5 +1,9 @@
 # dependencies
 /node_modules
+/game/node_modules
+
+# game build output (built by prebuild from game/ source)
+/public/game/
 /.pnp
 .pnp.js
 

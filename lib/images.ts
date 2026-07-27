@@ -23,6 +23,11 @@ const STOP_TINT: Record<string, string> = {
   'rocky-mountain': '#14304A',
   badlands: '#5C3D2E',
   'st-paul': '#3E6E9C',
+  // Sampled from each cover so the blur-up doesn't flash a mismatched hue.
+  burlington: '#8A8064',
+  chicago: '#4A4746',
+  detroit: '#6E7468',
+  'niagara-falls': '#656E74',
 };
 
 /** Derive the stop slug from an image path like /images/stops/zion/cover.jpg */
