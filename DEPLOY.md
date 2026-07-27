@@ -20,12 +20,21 @@ then builds around it:
 1. Root [`package.json`](package.json) has an npm `prebuild` lifecycle script:
 
    ```json
-   "prebuild": "cd game && npm ci && npm run build",
+   "prebuild": "cd game && npm ci --include=dev && npm run build",
    "build": "next build"
    ```
 
    `npm run build` automatically runs `prebuild` first, so the order is always
    **game build → `next build`**.
+
+   > ⚠️ **`--include=dev` is required, not optional.** Vercel builds with
+   > `NODE_ENV=production`, and in that mode `npm ci` **skips
+   > devDependencies** — which is where Vite lives. Without the flag the game
+   > install pulls only React (5 packages) and the build dies with
+   > `sh: line 1: vite: command not found` (exit 127), taking the whole
+   > deploy down with it. This is easy to miss locally, where `NODE_ENV`
+   > isn't `production` and plain `npm ci` works fine. To reproduce the
+   > failure: `cd game && NODE_ENV=production npm ci`.
 
 2. The game's [`game/vite.config.js`](game/vite.config.js) outputs straight into
    the site:

@@ -5,7 +5,7 @@
   "description": "Jathan Forever — the shared travel journal of Ethan Highfield & Jacob Monroe.",
   "scripts": {
     "dev": "next dev",
-    "prebuild": "cd game && npm ci && npm run build",
+    "prebuild": "cd game && npm ci --include=dev && npm run build",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
