@@ -36,8 +36,7 @@ export default function JourneyPage() {
       </Reveal>
 
       <p className="mt-6 font-sans text-xs text-ink/45">
-        Map tiles © OpenStreetMap contributors, © CARTO. Markers are colored by
-        author — deep blue for Jacob, clay for Ethan.
+        Markers are colored by author — deep blue for Jacob, clay for Ethan.
       </p>
     </div>
   );

@@ -9,11 +9,13 @@ import 'leaflet/dist/leaflet.css';
 import type { RouteStop } from '@/lib/route';
 import { authorMeta } from '@/lib/authors';
 import { blurForImage } from '@/lib/images';
+import { MAP_TILES } from '@/lib/mapTiles';
 
 /*
   ──────────────────────────────────────────────────────────────────────────
   SWAP POINT — Mapbox GL
-  This map uses free OpenStreetMap raster tiles (no API key). To swap in a
+  Tiles come from lib/mapTiles.ts (CARTO Voyager with NEXT_PUBLIC_CARTO_KEY,
+  OpenStreetMap otherwise). To swap in a
   more stylized Mapbox map later:
     1. npm i react-map-gl mapbox-gl
     2. Replace <MapContainer>/<TileLayer> with react-map-gl's <Map> using a
@@ -100,11 +102,7 @@ export default function RouteMap({ stops }: { stops: RouteStop[] }) {
           className="h-full w-full"
           style={{ background: '#e9e2d6' }}
         >
-          <TileLayer
-            // Carto "Voyager" — warm, light, editorial. No key required.
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
-            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png"
-          />
+          <TileLayer attribution={MAP_TILES.attribution} url={MAP_TILES.url} />
 
           <Polyline
             positions={path}

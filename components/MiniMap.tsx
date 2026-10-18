@@ -3,6 +3,7 @@
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { MAP_TILES } from '@/lib/mapTiles';
 
 /**
  * A small, calm single-stop map for the bottom of a diary entry.
@@ -38,11 +39,12 @@ export default function MiniMap({
       dragging={false}
       doubleClickZoom={false}
       zoomControl={false}
-      attributionControl={false}
+      attributionControl
       className="h-full w-full"
       style={{ background: '#e9e2d6' }}
     >
-      <TileLayer url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" />
+      {/* Both tile providers require visible attribution, so it stays on even here. */}
+      <TileLayer attribution={MAP_TILES.attribution} url={MAP_TILES.url} />
       <Marker position={[lat, lng]} icon={pin(color)} title={label} />
     </MapContainer>
   );
