@@ -33,6 +33,15 @@ const FrontmatterSchema = z.object({
   coverImage: z.string().min(1),
   gallery: z.array(z.string()).default([]),
   excerpt: z.string().min(1),
+  /** optional vertical (9:16) clip from the stop, narrated by the entry's author */
+  video: z
+    .object({
+      src: z.string().min(1),
+      poster: z.string().min(1),
+      /** length in seconds, shown next to the play button */
+      duration: z.number().positive().optional(),
+    })
+    .optional(),
 });
 
 export type Frontmatter = z.infer<typeof FrontmatterSchema>;

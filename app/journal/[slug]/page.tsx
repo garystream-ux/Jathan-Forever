@@ -9,6 +9,7 @@ import AuthorByline from '@/components/AuthorByline';
 import PhotoGrid from '@/components/PhotoGrid';
 import MiniMapSection from '@/components/MiniMapSection';
 import Comments from '@/components/Comments';
+import StopVideo from '@/components/StopVideo';
 import {
   getAllSlugs,
   getEntryBySlug,
@@ -20,6 +21,12 @@ import { blurForImage } from '@/lib/images';
 import { site } from '@/lib/site';
 import { getHomeCopy } from '@/lib/homepage';
 import { getCaption } from '@/lib/captions';
+
+/** 77 → "1:17" */
+function formatDuration(seconds: number): string {
+  const s = Math.round(seconds);
+  return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+}
 
 export function generateStaticParams() {
   return getAllSlugs().map((slug) => ({ slug }));
@@ -119,17 +126,43 @@ export default function EntryPage({ params }: { params: { slug: string } }) {
         </Reveal>
       </div>
 
-      {/* Body */}
+      {/* Body (with the stop's clip beside it on wide screens, above it on narrow) */}
       <div className="shell mt-12">
-        <div className="mx-auto max-w-prose">
-          {/* voice rule */}
-          <div
-            className="mb-8 h-1 w-16 rounded-full"
-            style={{ backgroundColor: voice.color }}
-            aria-hidden="true"
-          />
-          <div className="entry-prose" style={voiceStyle}>
-            <MDXRemote source={entry.content} />
+        <div
+          className={
+            entry.video
+              ? 'mx-auto max-w-5xl lg:grid lg:grid-cols-[minmax(0,1fr)_20rem] lg:items-start lg:gap-16'
+              : 'mx-auto max-w-prose'
+          }
+        >
+          {entry.video && (
+            <aside className="mb-14 lg:sticky lg:top-28 lg:order-2 lg:mb-0">
+              <Reveal>
+                <p className="eyebrow mb-4 text-center">On camera</p>
+                <StopVideo
+                  src={entry.video.src}
+                  poster={entry.video.poster}
+                  label={`${entry.title}, narrated by ${voice.first}`}
+                  color={voice.color}
+                  caption={
+                    entry.video.duration
+                      ? `${voice.first} narrates · ${formatDuration(entry.video.duration)}`
+                      : `${voice.first} narrates`
+                  }
+                />
+              </Reveal>
+            </aside>
+          )}
+          <div className="mx-auto max-w-prose lg:order-1 lg:mx-0">
+            {/* voice rule */}
+            <div
+              className="mb-8 h-1 w-16 rounded-full"
+              style={{ backgroundColor: voice.color }}
+              aria-hidden="true"
+            />
+            <div className="entry-prose" style={voiceStyle}>
+              <MDXRemote source={entry.content} />
+            </div>
           </div>
         </div>
       </div>
